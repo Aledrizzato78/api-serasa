@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 20 14:55:09 BRT 2025
+@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395709448
+https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact org.apache.logging.log4j\:log4j-to-slf4j\:jar\:2.24.3 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
+https\://repo.maven.apache.org/maven2/.lastUpdated=1737395709526

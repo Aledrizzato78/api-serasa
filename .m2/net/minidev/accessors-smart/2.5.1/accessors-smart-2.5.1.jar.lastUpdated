@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 20 14:55:10 BRT 2025
+@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395710757
+https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact net.minidev\:accessors-smart\:jar\:2.5.1 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: Este host n\u00E3o \u00E9 conhecido (nexus.cnpbr.intranet)
+https\://repo.maven.apache.org/maven2/.lastUpdated=1737395710877

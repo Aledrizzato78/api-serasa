@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 20 14:45:29 BRT 2025
+@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395129830
+https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact org.springframework.boot\:spring-boot-starter-data-jpa\:jar\:sources\:3.4.1 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: Este host n\u00E3o \u00E9 conhecido (nexus.cnpbr.intranet)
+https\://repo.maven.apache.org/maven2/.lastUpdated=1737395129890

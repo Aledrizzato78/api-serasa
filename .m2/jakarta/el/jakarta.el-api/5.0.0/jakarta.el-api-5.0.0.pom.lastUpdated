@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 20 15:54:41 BRT 2025
+https\://repo.maven.apache.org/maven2/.lastUpdated=1737399281762
+https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact jakarta.el\:jakarta.el-api\:pom\:5.0.0 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
+@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737399281655

@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 20 14:45:26 BRT 2025
+@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395125930
+https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact io.swagger.core.v3\:swagger-annotations-jakarta\:jar\:sources\:2.2.9 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
+https\://repo.maven.apache.org/maven2/.lastUpdated=1737395126004
