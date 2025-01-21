@@ -1,6 +1,6 @@
 #NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Mon Jan 20 14:45:15 BRT 2025
-@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395114860
-https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact org.apache.tomcat.embed\:tomcat-embed-core\:jar\:javadoc\:10.1.34 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
+#Tue Jan 21 11:08:15 BRT 2025
+https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737468495739
+https\://repo.maven.apache.org/maven2/.lastUpdated=1737468495791
+https\://nexus.cnpbr.intranet/repository/maven-public/.error=
 https\://repo.maven.apache.org/maven2/.error=
-https\://repo.maven.apache.org/maven2/.lastUpdated=1737395115036
