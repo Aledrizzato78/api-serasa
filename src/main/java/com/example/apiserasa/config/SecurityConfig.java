@@ -16,45 +16,46 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()  // Libera login
+                        .requestMatchers("/api/auth/**").permitAll()  // Libera autenticação
                         .requestMatchers("/h2-console/**").permitAll()  // Libera H2 Console
                         .requestMatchers("/api-docs/**", "/swagger-ui/**").permitAll()  // Libera Swagger
-                        .requestMatchers("GET", "/api/pessoas/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("POST", "/api/pessoas/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/pessoas/**").permitAll()  // Libera todas as operações de pessoas
+                        .requestMatchers("/error").permitAll()  // Libera página de erro
+                        .anyRequest().permitAll()  // Libera tudo temporariamente para testes
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // Libera acesso ao console H2 no navegador
+        // Libera o acesso ao console H2 no navegador
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
 
+    // Configuração temporária de usuários em memória para testes
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails adminUser = User.withUsername("admin")
-                .password(passwordEncoder().encode("admin"))  // Senha admin
-                .roles("ADMIN")  // Apenas o admin pode cadastrar
+                .password(passwordEncoder().encode("admin"))
+                .roles("ADMIN")
                 .build();
 
         UserDetails normalUser = User.withUsername("user")
-                .password(passwordEncoder().encode("user"))  // Senha user
-                .roles("USER")  // Apenas consulta
+                .password(passwordEncoder().encode("user"))
+                .roles("USER")
                 .build();
 
         return new InMemoryUserDetailsManager(adminUser, normalUser);
     }
 
+    // Bean para codificação de senhas
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // Codifica senhas com segurança
+        return new BCryptPasswordEncoder();
     }
 }

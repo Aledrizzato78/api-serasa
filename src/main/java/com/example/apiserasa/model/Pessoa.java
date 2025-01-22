@@ -3,7 +3,6 @@ package com.example.apiserasa.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-
 @Entity
 @Table(name = "pessoas")
 public class Pessoa {
@@ -25,17 +24,21 @@ public class Pessoa {
     @Pattern(regexp = "\\d{8}", message = "O CEP deve conter 8 dígitos numéricos")
     private String cep;
 
-    @NotBlank(message = "O estado é obrigatório")
+    @NotNull(message = "O estado é obrigatório")
+    @NotEmpty(message = "O estado não pode estar vazio")
     @Size(max = 2, message = "O estado deve ter no máximo 2 caracteres (UF)")
     private String estado;
 
-    @NotBlank(message = "A cidade é obrigatória")
+    @NotNull(message = "A cidade é obrigatória")
+    @NotEmpty(message = "A cidade não pode estar vazia")
     private String cidade;
 
-    @NotBlank(message = "O bairro é obrigatório")
+    @NotNull(message = "O bairro é obrigatório")
+    @NotEmpty(message = "O bairro não pode estar vazio")
     private String bairro;
 
-    @NotBlank(message = "O logradouro é obrigatório")
+    @NotNull(message = "O logradouro é obrigatório")
+    @NotEmpty(message = "O logradouro não pode estar vazio")
     private String logradouro;
 
     @NotBlank(message = "O telefone é obrigatório")
@@ -62,6 +65,19 @@ public class Pessoa {
         this.logradouro = logradouro;
         this.telefone = telefone;
         this.score = score;
+    }
+
+    // Método para limpar espaços em branco antes de persistir a entidade
+    @PrePersist
+    @PreUpdate
+    private void trimStrings() {
+        if (nome != null) nome = nome.trim();
+        if (cep != null) cep = cep.trim();
+        if (estado != null) estado = estado.trim();
+        if (cidade != null) cidade = cidade.trim();
+        if (bairro != null) bairro = bairro.trim();
+        if (logradouro != null) logradouro = logradouro.trim();
+        if (telefone != null) telefone = telefone.trim();
     }
 
     // Getters e Setters

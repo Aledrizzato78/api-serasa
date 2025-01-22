@@ -2,11 +2,12 @@ package com.example.apiserasa.controller;
 
 import com.example.apiserasa.model.Pessoa;
 import com.example.apiserasa.service.PessoaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,10 +27,14 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novaPessoa);
     }
 
-    // Endpoint para listar todas as pessoas
+    // Endpoint para listar todas as pessoas com filtros e paginação
     @GetMapping
-    public ResponseEntity<List<Pessoa>> listarPessoas() {
-        List<Pessoa> pessoas = pessoaService.listarPessoas();
+    public ResponseEntity<Page<Pessoa>> listarPessoas(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) Integer idade,
+            @RequestParam(required = false) String cep,
+            Pageable pageable) {
+        Page<Pessoa> pessoas = pessoaService.listarPessoas(nome, idade, cep, pageable);
         return ResponseEntity.ok(pessoas);
     }
 
@@ -63,10 +68,23 @@ public class PessoaController {
         }
     }
 
-    // Endpoint para buscar pessoas por nome
+    // Endpoint para buscar pessoas por nome com paginação
     @GetMapping("/buscar")
-    public ResponseEntity<List<Pessoa>> buscarPessoasPorNome(@RequestParam String nome) {
-        List<Pessoa> pessoas = pessoaService.buscarPessoasPorNome(nome);
+    public ResponseEntity<Page<Pessoa>> buscarPessoasPorNome(
+            @RequestParam String nome,
+            Pageable pageable) {
+        Page<Pessoa> pessoas = pessoaService.buscarPessoasPorNome(nome, pageable);
         return ResponseEntity.ok(pessoas);
+    }
+
+    // Novo endpoint para obter a descrição do score
+    @GetMapping("/score/{score}")
+    public ResponseEntity<String> obterDescricaoScore(@PathVariable Integer score) {
+        try {
+            String descricao = pessoaService.obterDescricaoScore(score);
+            return ResponseEntity.ok(descricao);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
