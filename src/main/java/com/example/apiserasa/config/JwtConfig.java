@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Component  // Garantir que o Spring gerencie este bean
+@Component
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
 
@@ -12,8 +12,7 @@ public class JwtConfig {
     private long expiration;
     private String issuer;
 
-    // Getters e Setters
-    public String getSecret() {
+   public String getSecret() {
         return secret;
     }
 

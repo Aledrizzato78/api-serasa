@@ -99,3 +99,16 @@ A API utiliza autenticação via JWT Token. Para acessar os endpoints protegidos
 Autentique-se em /api/auth/login com admin/admin.
 
 Utilize o token recebido no cabeçalho das requisições:
+
+### Perfis de Usuário
+
+Por padrão, dois usuários em memória:
+- **admin** (senha: **admin**) com ROLE_ADMIN
+- **user** (senha: **user**) com ROLE_USER
+
+#### Permissões:
+- **ROLE_ADMIN**: pode criar (POST), atualizar (PUT) e excluir (DELETE).
+- **ROLE_USER**: pode somente consultar (GET).
+
+### Consulta de Endereço via CEP
+Ao criar uma nova Pessoa, basta enviar o JSON com o campo "cep" (por exemplo, "01001-000"), que a aplicação consultará os dados de endereço via [ViaCEP](https://viacep.com.br/).

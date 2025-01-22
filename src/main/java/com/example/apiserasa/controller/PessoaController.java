@@ -45,7 +45,7 @@ public class PessoaController {
     })
     @PostMapping("/criar")
     public ResponseEntity<Pessoa> criarPessoa(@RequestBody Pessoa pessoa) {
-        Pessoa novaPessoa = pessoaService.criarPessoa(pessoa);
+        Pessoa novaPessoa = pessoaService.criarPessoa(pessoa).getBody();
         return ResponseEntity.status(HttpStatus.CREATED).body(novaPessoa);
     }
 

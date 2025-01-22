@@ -7,8 +7,13 @@ import com.example.apiserasa.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -16,34 +21,48 @@ import java.util.Optional;
 public class PessoaService {
 
     private final PessoaRepository pessoaRepository;
-    private final EnderecoRepository enderecoRepository;
+    private final CepService cepService;
+
 
     @Autowired
-    public PessoaService(PessoaRepository pessoaRepository, EnderecoRepository enderecoRepository) {
+    public PessoaService(PessoaRepository pessoaRepository, CepService cepService) {
         this.pessoaRepository = pessoaRepository;
-        this.enderecoRepository = enderecoRepository;
+        this.cepService = cepService;
     }
 
-    public Pessoa criarPessoa(Pessoa pessoa) {
-        if (pessoa.getEndereco() != null && pessoa.getEndereco().getId() != null) {
+    @PostMapping("/criar")
+    @PreAuthorize("hasRole('ADMIN')")  // Somente ADMIN pode criar
+    public ResponseEntity<Pessoa> criarPessoa(@RequestBody Pessoa pessoaRequest) {
+        // Endereço informado no body
+        Endereco enderecoRequest = pessoaRequest.getEndereco();
 
-            Endereco enderecoExistente = enderecoRepository.findById(pessoa.getEndereco().getId())
-                    .orElseThrow(() -> new RuntimeException("Endereço não encontrado")).getEndereco();
-
-            pessoa.setEndereco(enderecoExistente);
+        // Tentamos consultar a API externa
+        Endereco enderecoCompleto;
+        try {
+            enderecoCompleto = cepService.buscarEnderecoPorCep(enderecoRequest.getCep());
+        } catch (Exception e) {
+            // Se não conseguir consultar (CEP inválido ou API offline), usa o que veio no body
+            enderecoCompleto = enderecoRequest;
         }
-        return pessoaRepository.save(pessoa);
+
+        // Atribui o endereço (da API ou do body, dependendo do resultado)
+        pessoaRequest.setEndereco(enderecoCompleto);
+
+        // Salva normalmente (ex.: usando o seu service de Pessoas)
+        Pessoa novaPessoa = pessoaRepository.save(pessoaRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(novaPessoa);
     }
 
     public Page<Pessoa> listarPessoas(String nome, Integer idade, String cep, Pageable pageable) {
         if (nome != null && !nome.isEmpty()) {
-            return pessoaRepository.findByNomeContainingIgnoreCase(nome, pageable);
+            return pessoaRepository.findByExcluidoFalseAndNomeContainingIgnoreCase(nome, pageable);
         } else if (idade != null) {
-            return pessoaRepository.findByIdade(idade, pageable);
+            return pessoaRepository.findByExcluidoFalseAndIdade(idade, pageable);
         } else if (cep != null && !cep.isEmpty()) {
-            return pessoaRepository.findByEnderecoCep(cep, pageable);
+            return pessoaRepository.findByExcluidoFalseAndEnderecoCep(cep, pageable);
         }
-        return pessoaRepository.findAll(pageable);
+        return pessoaRepository.findByExcluidoFalse(pageable);
     }
 
     public Optional<Pessoa> buscarPessoaPorId(Long id) {
@@ -84,25 +103,21 @@ public class PessoaService {
     }
 
 
-    @Transactional
     public void excluirPessoa(Long id) {
-        if (pessoaRepository.existsById(id)) {
-            pessoaRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Pessoa não encontrada com ID: " + id);
-        }
+        Pessoa pessoa = pessoaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada com ID: " + id));
+        pessoa.setExcluido(true);
+        pessoaRepository.save(pessoa);  // Atualiza o registro com excluido = true
     }
 
     public Page<Pessoa> buscarPessoasPorNome(String nome, Pageable pageable) {
         return pessoaRepository.findByNomeContainingIgnoreCase(nome, pageable);
     }
 
-    // Método para obter a descrição do score com base na tabela fornecida
     public String obterDescricaoScore(Integer score) {
         if (score == null) {
             throw new IllegalArgumentException("O score não pode ser nulo.");
         }
-
         if (score >= 0 && score <= 200) {
             return "Insuficiente";
         } else if (score >= 201 && score <= 500) {

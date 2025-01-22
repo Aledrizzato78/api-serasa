@@ -1,5 +1,6 @@
 package com.example.apiserasa.model;
 
+import com.example.apiserasa.model.Endereco;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -25,16 +26,22 @@ public class Pessoa {
     @Max(value = 1000, message = "O score máximo permitido é 1000")
     private Integer score;
 
-    // Relacionamento com Endereco (tabela separada)
+    @NotBlank(message = "O telefone é obrigatório")
+    private String telefone;
+
+    // Para exclusão lógica
+    private boolean excluido = false;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;
 
-    // Construtor padrão
-    public Pessoa() {}
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -59,6 +66,22 @@ public class Pessoa {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public boolean isExcluido() {
+        return excluido;
+    }
+
+    public void setExcluido(boolean excluido) {
+        this.excluido = excluido;
     }
 
     public Endereco getEndereco() {
