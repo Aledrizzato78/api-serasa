@@ -1,5 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Mon Jan 20 14:43:58 BRT 2025
-@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395037924
-https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact com.fasterxml.jackson.core\:jackson-annotations\:jar\:javadoc\:2.18.2 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
-https\://repo.maven.apache.org/maven2/.lastUpdated=1737395038173

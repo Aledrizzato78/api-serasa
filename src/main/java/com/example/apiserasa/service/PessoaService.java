@@ -1,6 +1,8 @@
 package com.example.apiserasa.service;
 
+import com.example.apiserasa.model.Endereco;
 import com.example.apiserasa.model.Pessoa;
+import com.example.apiserasa.repository.EnderecoRepository;
 import com.example.apiserasa.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,13 +16,22 @@ import java.util.Optional;
 public class PessoaService {
 
     private final PessoaRepository pessoaRepository;
+    private final EnderecoRepository enderecoRepository;
 
     @Autowired
-    public PessoaService(PessoaRepository pessoaRepository) {
+    public PessoaService(PessoaRepository pessoaRepository, EnderecoRepository enderecoRepository) {
         this.pessoaRepository = pessoaRepository;
+        this.enderecoRepository = enderecoRepository;
     }
 
     public Pessoa criarPessoa(Pessoa pessoa) {
+        if (pessoa.getEndereco() != null && pessoa.getEndereco().getId() != null) {
+
+            Endereco enderecoExistente = enderecoRepository.findById(pessoa.getEndereco().getId())
+                    .orElseThrow(() -> new RuntimeException("Endereço não encontrado")).getEndereco();
+
+            pessoa.setEndereco(enderecoExistente);
+        }
         return pessoaRepository.save(pessoa);
     }
 
@@ -30,7 +41,7 @@ public class PessoaService {
         } else if (idade != null) {
             return pessoaRepository.findByIdade(idade, pageable);
         } else if (cep != null && !cep.isEmpty()) {
-            return pessoaRepository.findByCep(cep, pageable);
+            return pessoaRepository.findByEnderecoCep(cep, pageable);
         }
         return pessoaRepository.findAll(pageable);
     }
@@ -41,19 +52,37 @@ public class PessoaService {
 
     @Transactional
     public Pessoa atualizarPessoa(Long id, Pessoa pessoaAtualizada) {
-        return pessoaRepository.findById(id).map(pessoa -> {
-            pessoa.setNome(pessoaAtualizada.getNome());
-            pessoa.setIdade(pessoaAtualizada.getIdade());
-            pessoa.setCep(pessoaAtualizada.getCep());
-            pessoa.setEstado(pessoaAtualizada.getEstado());
-            pessoa.setCidade(pessoaAtualizada.getCidade());
-            pessoa.setBairro(pessoaAtualizada.getBairro());
-            pessoa.setLogradouro(pessoaAtualizada.getLogradouro());
-            pessoa.setTelefone(pessoaAtualizada.getTelefone());
-            pessoa.setScore(pessoaAtualizada.getScore());
-            return pessoaRepository.save(pessoa);
-        }).orElseThrow(() -> new RuntimeException("Pessoa não encontrada com ID: " + id));
+        return pessoaRepository.findById(id)
+                .map(pessoa -> {
+                    // Atualiza campos diretos de Pessoa
+                    pessoa.setNome(pessoaAtualizada.getNome());
+                    pessoa.setIdade(pessoaAtualizada.getIdade());
+                    pessoa.setScore(pessoaAtualizada.getScore());
+
+                    // Atualiza o Endereço dentro de Pessoa
+                    if (pessoaAtualizada.getEndereco() != null) {
+                        // Se o endereço atual da pessoa for nulo, cria um novo para preencher
+                        if (pessoa.getEndereco() == null) {
+                            pessoa.setEndereco(new Endereco());
+                        }
+                        pessoa.getEndereco().setCep(pessoaAtualizada.getEndereco().getCep());
+                        pessoa.getEndereco().setLogradouro(pessoaAtualizada.getEndereco().getLogradouro());
+                        pessoa.getEndereco().setComplemento(pessoaAtualizada.getEndereco().getComplemento());
+                        pessoa.getEndereco().setBairro(pessoaAtualizada.getEndereco().getBairro());
+                        pessoa.getEndereco().setLocalidade(pessoaAtualizada.getEndereco().getLocalidade());
+                        pessoa.getEndereco().setUf(pessoaAtualizada.getEndereco().getUf());
+                    } else {
+                        // Caso queira permitir que o endereço seja removido,
+                        // você pode definir aqui um comportamento para setar null
+                        // Exemplo:
+                        // pessoa.setEndereco(null);
+                    }
+
+                    return pessoaRepository.save(pessoa);
+                })
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada com ID: " + id));
     }
+
 
     @Transactional
     public void excluirPessoa(Long id) {

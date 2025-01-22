@@ -1,6 +1,6 @@
 package com.example.apiserasa.security;
 
-import com.example.apiserasa.service.JwtService;
+import com.example.apiserasa.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,13 +20,13 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
 
     // Use @Lazy para resolver dependências circulares, se necessário
-    public JwtAuthenticationFilter(@Lazy JwtService jwtService, @Lazy UserDetailsService userDetailsService) {
-        this.jwtService = jwtService;
+    public JwtAuthenticationFilter(@Lazy UserDetailsService userDetailsService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
 
         try {
-            username = jwtService.extractUsername(token);
+            username = jwtUtil.extractUsername(token);
         } catch (ExpiredJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Token expirado");
@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.isTokenValid(token, userDetails)) {
+            if (jwtUtil.validateToken(token)) {
                 System.out.println("Token válido para o usuário: " + userDetails.getUsername());
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

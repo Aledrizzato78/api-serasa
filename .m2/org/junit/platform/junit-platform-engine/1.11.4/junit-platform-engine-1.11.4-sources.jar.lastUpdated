@@ -1,5 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Mon Jan 20 14:45:10 BRT 2025
-@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395110775
-https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact org.junit.platform\:junit-platform-engine\:jar\:sources\:1.11.4 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
-https\://repo.maven.apache.org/maven2/.lastUpdated=1737395110888

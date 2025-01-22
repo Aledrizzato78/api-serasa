@@ -1,5 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Mon Jan 20 14:40:08 BRT 2025
-@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737394808406
-https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact com.querydsl\:querydsl-bom\:pom\:5.0.0 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
-https\://repo.maven.apache.org/maven2/.lastUpdated=1737394808443

@@ -1,5 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Mon Jan 20 14:51:04 BRT 2025
-@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395464234
-https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact org.antlr\:antlr4-master\:pom\:4.7.2 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
-https\://repo.maven.apache.org/maven2/.lastUpdated=1737395464273

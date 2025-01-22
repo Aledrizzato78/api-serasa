@@ -1,6 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Mon Jan 20 14:45:28 BRT 2025
-@default-Public-https\://nexus.cnpbr.intranet/repository/maven-public/.lastUpdated=1737395128014
-https\://nexus.cnpbr.intranet/repository/maven-public/.error=Could not transfer artifact io.jsonwebtoken\:jjwt\:jar\:sources\:0.11.2 from/to Public (https\://nexus.cnpbr.intranet/repository/maven-public/)\: nexus.cnpbr.intranet
-https\://repo.maven.apache.org/maven2/.error=
-https\://repo.maven.apache.org/maven2/.lastUpdated=1737395128235

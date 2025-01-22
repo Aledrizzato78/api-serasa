@@ -2,6 +2,13 @@ package com.example.apiserasa.controller;
 
 import com.example.apiserasa.model.Pessoa;
 import com.example.apiserasa.service.PessoaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,15 +27,30 @@ public class PessoaController {
         this.pessoaService = pessoaService;
     }
 
-    // Endpoint para criar uma nova pessoa
-    @PostMapping
+    @Operation(
+            summary = "Cria uma pessoa",
+            description = "Cria uma nova pessoa no sistema.",
+            parameters = {
+                    @Parameter(name = "Authorization",
+                            description = "Exemplo de parâmetro no cabeçalho",
+                            required = true,
+                            in = ParameterIn.HEADER,
+                            schema = @Schema(type = "string"))
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved person",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Pessoa.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid ID supplied")
+    })
+    @PostMapping("/criar")
     public ResponseEntity<Pessoa> criarPessoa(@RequestBody Pessoa pessoa) {
         Pessoa novaPessoa = pessoaService.criarPessoa(pessoa);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaPessoa);
     }
 
     // Endpoint para listar todas as pessoas com filtros e paginação
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<Page<Pessoa>> listarPessoas(
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) Integer idade,
@@ -39,7 +61,7 @@ public class PessoaController {
     }
 
     // Endpoint para buscar uma pessoa pelo ID
-    @GetMapping("/{id}")
+    @GetMapping("/buscarPorId/{id}")
     public ResponseEntity<Pessoa> buscarPessoaPorId(@PathVariable Long id) {
         Optional<Pessoa> pessoa = pessoaService.buscarPessoaPorId(id);
         return pessoa.map(ResponseEntity::ok)
@@ -47,7 +69,7 @@ public class PessoaController {
     }
 
     // Endpoint para atualizar uma pessoa existente
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoaAtualizada) {
         try {
             Pessoa pessoa = pessoaService.atualizarPessoa(id, pessoaAtualizada);
@@ -58,7 +80,7 @@ public class PessoaController {
     }
 
     // Endpoint para excluir uma pessoa pelo ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/excluir/{id}")
     public ResponseEntity<Void> excluirPessoa(@PathVariable Long id) {
         try {
             pessoaService.excluirPessoa(id);
@@ -69,7 +91,7 @@ public class PessoaController {
     }
 
     // Endpoint para buscar pessoas por nome com paginação
-    @GetMapping("/buscar")
+    @GetMapping("/buscarPorNome")
     public ResponseEntity<Page<Pessoa>> buscarPessoasPorNome(
             @RequestParam String nome,
             Pageable pageable) {

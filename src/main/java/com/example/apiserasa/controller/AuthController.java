@@ -1,7 +1,7 @@
 package com.example.apiserasa.controller;
 
-import com.example.apiserasa.dto.AuthRequest;
-import com.example.apiserasa.dto.AuthResponse;
+import com.example.apiserasa.security.AuthRequest;
+import com.example.apiserasa.security.AuthResponse;
 import com.example.apiserasa.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
