@@ -1,10 +1,11 @@
 package com.example.apiserasa.controller;
 
+import com.example.apiserasa.dto.AuthRequest;
+import com.example.apiserasa.dto.AuthResponse;
 import com.example.apiserasa.service.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -17,15 +18,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> autenticar(@RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
-        String password = credentials.get("password");
-
+    public ResponseEntity<AuthResponse> autenticar(@RequestBody AuthRequest authRequest) {
         try {
-            String token = authService.autenticarUsuario(username, password);
-            return ResponseEntity.ok(Map.of("token", token));
+            String token = authService.autenticarUsuario(authRequest.getUsername(), authRequest.getPassword());
+            return ResponseEntity.ok(new AuthResponse(token));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(401).body("Usuário ou senha inválidos");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse("Usuário ou senha inválidos"));
         }
     }
 }

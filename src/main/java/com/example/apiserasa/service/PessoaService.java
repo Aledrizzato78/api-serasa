@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -38,6 +39,7 @@ public class PessoaService {
         return pessoaRepository.findById(id);
     }
 
+    @Transactional
     public Pessoa atualizarPessoa(Long id, Pessoa pessoaAtualizada) {
         return pessoaRepository.findById(id).map(pessoa -> {
             pessoa.setNome(pessoaAtualizada.getNome());
@@ -53,6 +55,7 @@ public class PessoaService {
         }).orElseThrow(() -> new RuntimeException("Pessoa não encontrada com ID: " + id));
     }
 
+    @Transactional
     public void excluirPessoa(Long id) {
         if (pessoaRepository.existsById(id)) {
             pessoaRepository.deleteById(id);

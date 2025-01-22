@@ -2,8 +2,9 @@ package com.example.apiserasa.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component  // Garantir que o Spring gerencie este bean
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
 
